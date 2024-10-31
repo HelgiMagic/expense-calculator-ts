@@ -1,16 +1,48 @@
 .adding-wrapper {
-    display: flex;
-    justify-content: center;
+  display: flex;
+  justify-content: center;
 
-    padding: 16px;
-    background: #E4FF97;
+  padding: 16px;
+  background: #e4ff97;
+}
+
+.adding-row {
+  display: flex;
+  align-items: center;
+  background: white;
+  border-radius: 100px;
 }
 
 .adding-wrapper input {
-    border: none;
-    padding: 10px 5px;
+  padding: 15px 20px;
+  border-radius: 50px;
+
+  transition: all 0.3s;
+}
+
+.adding-wrapper input:hover {
+    background: #ebebeb;
+}
+
+.adding-wrapper input:focus {
+    background: white !important;
 }
 
 .adding-wrapper button {
-    border: none;
+  border-radius: 50px;
+  height: 28px;
+  width: 28px;
+  background: #ff385c;
+  cursor: pointer;
+
+  margin: 0 10px;
+
+  svg {
+    height: 14px;
+    width: 14px;
+  }
+}
+
+.adding-wrapper button:hover {
+  background: linear-gradient(90deg, #ff65a8, #df528f);
 }
