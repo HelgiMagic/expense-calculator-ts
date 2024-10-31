@@ -1,0 +1,16 @@
+.adding-wrapper {
+    display: flex;
+    justify-content: center;
+
+    padding: 16px;
+    background: #E4FF97;
+}
+
+.adding-wrapper input {
+    border: none;
+    padding: 10px 5px;
+}
+
+.adding-wrapper button {
+    border: none;
+}
