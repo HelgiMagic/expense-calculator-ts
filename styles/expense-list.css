@@ -1,0 +1,49 @@
+.expenses-wrapper {
+    max-width: 1200px;
+    padding: 16px;
+    margin: 0 auto;
+}
+
+.expenses-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.expense-item {
+    display: flex;
+    flex-direction: column;
+    border-radius: 15px;
+    border: 1px solid #f1f1f1;
+    padding: 10px 15px;
+    gap: 10px;
+}
+
+.expense-item-row {
+    display: flex;
+    gap: 10px;
+}
+
+.expense-item__category {
+    background: #f1f1f1;
+    padding: 5px 10px;
+    border-radius: 10px;
+    width: fit-content;
+}
+
+.expense-item__sum {
+    flex-grow: 1;
+}
+
+.expense-item__delete, .expense-item__edit {
+    border: 1px solid #ededed;
+    border-radius: 5px;
+    cursor: pointer;
+
+    padding: 3px;
+    display: flex;
+}
+
+.expense-item__delete:hover, .expense-item__edit:hover {
+    background: #ededed;
+}

@@ -7,6 +7,7 @@
     "#components/*": "./components/*",
     "#assets/*": "./assets/*",
     "#styles/*": "./styles/*",
+    "#state/*": "./state/*",
     "#utils/*": "./utils/*",
     "#types/*": "./types/*"
   },
