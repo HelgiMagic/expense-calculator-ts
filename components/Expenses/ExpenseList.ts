@@ -1,7 +1,14 @@
 import '#styles/components/expense-list.css';
 import { ExpenseStateType } from '#types/main.ts';
+import addDynamicEventListener from '#utils/DynamicEventListener.ts';
+
+let ExpenseState: ExpenseStateType;
 
 export default function renderExpenseList(state: ExpenseStateType) {
+  if (!ExpenseState) {
+    ExpenseState = state;
+  }
+
   const listContainer = document.querySelector('.expense-list-js');
   if (!listContainer) return;
 
@@ -17,7 +24,7 @@ export default function renderExpenseList(state: ExpenseStateType) {
   expenses.forEach((expense) => {
     const category = expense.category || 'Без категории';
     const item = `
-    <div class="expense-item">
+    <div class="expense-item" data-id="${expense.id}">
         <div class="expense-item__category">${category}</div>
 
         <div class="expense-item-row">
@@ -35,3 +42,11 @@ export default function renderExpenseList(state: ExpenseStateType) {
     listContainer.insertAdjacentHTML('beforeend', item);
   });
 }
+
+addDynamicEventListener(document.body, 'click', '.expense-item__delete', (event) => {
+    const target = event.target as HTMLElement;
+    const parent = target.closest('.expense-item') as HTMLElement;
+    const id = parent.getAttribute('data-id') as string;
+
+    ExpenseState.removeExpense(id);
+});

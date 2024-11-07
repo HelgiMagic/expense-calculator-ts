@@ -10,5 +10,7 @@ export type ExpenseStateType = {
   categories: string[];
   filterCategory: string;
   addExpense: (expense: Expense) => void;
+  removeExpense: (id: string) => void;
   changeFilterCategory: (category: string) => void;
+  calculateFilterCategories: () => void;
 };
