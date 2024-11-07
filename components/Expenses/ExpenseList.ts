@@ -1,13 +1,20 @@
-import '#styles/expense-list.css';
+import '#styles/components/expense-list.css';
 import { ExpenseStateType } from '#types/main.ts';
 
 export default function renderExpenseList(state: ExpenseStateType) {
-  const listContainer = document.querySelector('.expenses-list');
+  const listContainer = document.querySelector('.expense-list-js');
   if (!listContainer) return;
 
   listContainer.innerHTML = '';
 
-  state.expenses.forEach((expense) => {
+  let expenses = state.expenses;
+  if (state.filterCategory !== 'Все категории') {
+    expenses = state.expenses.filter(
+      (expense) => expense.category === state.filterCategory
+    );
+  }
+
+  expenses.forEach((expense) => {
     const category = expense.category || 'Без категории';
     const item = `
     <div class="expense-item">
