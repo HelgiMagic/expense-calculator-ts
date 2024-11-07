@@ -12,18 +12,27 @@ const ExpenseState: ExpenseStateType = {
     // т.е. делать проверку через switch на адрес страницы
     ExpenseState.expenses.push(expense);
 
-    if (
-      !ExpenseState.categories.includes(expense.category) &&
-      expense.category !== ''
-    ) {
-      ExpenseState.categories.push(expense.category);
+    ExpenseState.calculateFilterCategories();
+    renderExpenseList(ExpenseState);
+  },
+  removeExpense: (id) => {
+    ExpenseState.expenses = ExpenseState.expenses.filter(
+      (expense) => expense.id !== id
+    );
+    ExpenseState.calculateFilterCategories();
+    renderExpenseList(ExpenseState);
+  },
+  calculateFilterCategories: () => {
+    ExpenseState.categories = [
+      'Все категории',
+      ...new Set(ExpenseState.expenses.map((expense) => expense.category)),
+    ];
 
-      console.log('категории');
-
-      renderExpenseCategoriesFilter(ExpenseState);
+    if (!ExpenseState.categories.includes(ExpenseState.filterCategory)) {
+      ExpenseState.filterCategory = 'Все категории';
     }
 
-    renderExpenseList(ExpenseState);
+    renderExpenseCategoriesFilter(ExpenseState);
   },
   changeFilterCategory: (category) => {
     ExpenseState.filterCategory = category;
