@@ -4,7 +4,7 @@
     margin: 0 auto;
 }
 
-.expenses-list {
+.expense-list-js {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 20px;
