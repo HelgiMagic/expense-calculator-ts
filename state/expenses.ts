@@ -2,6 +2,7 @@ import { ExpenseStateType } from '#types/expense.ts';
 import renderExpenseList from '#components/Expenses/ExpenseList.ts';
 import renderExpenseCategoriesFilter from '#components/Expenses/ExpenseCategoriesFilter.ts';
 import modalState from '#state/modal.ts';
+import '#styles/components/expense/expense-adding.css';
 
 const ExpenseState: ExpenseStateType = {
   expenses: [],
