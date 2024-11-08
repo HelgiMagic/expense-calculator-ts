@@ -16,9 +16,7 @@ export default function renderExpenseList(state: ExpenseStateType) {
 
   let expenses = state.expenses;
   if (state.filterCategory !== 'Все категории') {
-    expenses = state.expenses.filter(
-      (expense) => expense.category === state.filterCategory
-    );
+    expenses = state.expenses.filter((expense) => expense.category === state.filterCategory);
   }
 
   expenses.forEach((expense) => {
@@ -43,10 +41,17 @@ export default function renderExpenseList(state: ExpenseStateType) {
   });
 }
 
-addDynamicEventListener(document.body, 'click', '.expense-item__delete', (event) => {
+function initEvents() {
+  const container = document.querySelector<HTMLDivElement>('.expense-list-js');
+  if (!container) return;
+
+  addDynamicEventListener(container, 'click', '.expense-item__delete', (event) => {
     const target = event.target as HTMLElement;
     const parent = target.closest('.expense-item') as HTMLElement;
     const id = parent.getAttribute('data-id') as string;
 
     ExpenseState.removeExpense(id);
-});
+  });
+}
+
+initEvents();
