@@ -21,7 +21,6 @@ function createModalState(globalState: GlobalStateType) {
         },
         closeModal: () => {
             modalState.openedModal = null;
-            console.log('test');
 
             // добавление d-none к оверлей и modal-js
             modalContainer?.classList.add('d-none');
