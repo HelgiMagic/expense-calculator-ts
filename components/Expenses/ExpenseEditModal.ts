@@ -1,11 +1,11 @@
-import '#styles/components/expense/expense-edit-modal.css'
-import addDynamicEventListener from '#utils/DynamicEventListener.ts'
-import { ExpenseStateType } from '#types/expense.ts'
-import { ModalStateType } from '#types/modal.ts'
-import { validateForm, FormErrors } from '#utils/validateForm.ts'
+import '#styles/components/expense/expense-edit-modal.css';
+import addDynamicEventListener from '#utils/DynamicEventListener.ts';
+import { ExpenseStateType } from '#types/expense.ts';
+import { ModalStateType } from '#types/modal.ts';
+import { validateForm, FormErrors } from '#utils/validateForm.ts';
 
-let expenseStateEvents: ExpenseStateType
-let modalStateEvents: ModalStateType
+let expenseStateEvents: ExpenseStateType;
+let modalStateEvents: ModalStateType;
 
 // local state
 // локальный стейт формы нужен для корректного отображения ошибок
@@ -13,38 +13,33 @@ let FormData = {
     title: '',
     sum: 0,
     category: '',
-}
+};
 
-let elementId: string | null = null
+let elementId: string | null = null;
 
 let FormErrors: FormErrors = {
     title: null,
     sum: null,
-}
+};
 
 function setFormErrors(errors: FormErrors) {
-    FormErrors = errors
-    renderExpenseEditModal(expenseStateEvents, modalStateEvents)
+    FormErrors = errors;
+    renderExpenseEditModal(expenseStateEvents, modalStateEvents);
 }
 
-export default function renderExpenseEditModal(
-    expenseState: ExpenseStateType,
-    modalState: ModalStateType
-) {
-    const editingElement = expenseState.expenses.find(
-        (expense) => expense.id === expenseState.currentEditingExpenseId
-    )
-    if (!editingElement) return
+export default function renderExpenseEditModal(expenseState: ExpenseStateType, modalState: ModalStateType) {
+    const editingElement = expenseState.expenses.find((expense) => expense.id === expenseState.currentEditingExpenseId);
+    if (!editingElement) return;
 
     // срабатывает 1 раз
     if (!expenseStateEvents) {
-        expenseStateEvents = expenseState
-        modalStateEvents = modalState
+        expenseStateEvents = expenseState;
+        modalStateEvents = modalState;
         FormData = {
             title: editingElement.title,
             sum: editingElement.sum,
             category: editingElement.category,
-        }
+        };
     }
 
     // инициализация локального стейта формы при первой загрузке или при переключении элементов
@@ -53,14 +48,14 @@ export default function renderExpenseEditModal(
             title: editingElement.title,
             sum: editingElement.sum,
             category: editingElement.category,
-        }
+        };
 
-        elementId = expenseState.currentEditingExpenseId
+        elementId = expenseState.currentEditingExpenseId;
     }
 
-    const container = document.querySelector<HTMLDivElement>('.modal-js')
-    if (!container || container.classList.contains('d-none')) return
-    container.innerHTML = ''
+    const container = document.querySelector<HTMLDivElement>('.modal-js');
+    if (!container || container.classList.contains('d-none')) return;
+    container.innerHTML = '';
 
     const modal = `
         <form class="edit-expense-form" novalidate>
@@ -75,57 +70,40 @@ export default function renderExpenseEditModal(
                 <button class="close-modal-js" type="button">Отмена</button>
             </div>
         </form>
-    `
+    `;
 
-    container.insertAdjacentHTML('beforeend', modal)
+    container.insertAdjacentHTML('beforeend', modal);
 }
 
 function initEvents() {
-    const container = document.querySelector<HTMLDivElement>('.modal-js')
-    if (!container) return
+    const container = document.querySelector<HTMLDivElement>('.modal-js');
+    if (!container) return;
 
     const validationRules = {
-        title: (value: string) =>
-            value.trim() ? null : 'Название обязательно.',
-        sum: (value: number) =>
-            value > 0 ? null : 'Сумма должна быть больше нуля.',
-    }
+        title: (value: string) => (value.trim() ? null : 'Название обязательно.'),
+        sum: (value: number) => (value > 0 ? null : 'Сумма должна быть больше нуля.'),
+    };
 
-    addDynamicEventListener(
-        container,
-        'submit',
-        '.edit-expense-form',
-        (event) => {
-            event.preventDefault()
+    addDynamicEventListener(container, 'submit', '.edit-expense-form', (event) => {
+        event.preventDefault();
 
-            const form = event.target as HTMLFormElement
-            FormData = {
-                title:
-                    form
-                        .querySelector<HTMLInputElement>('[name="title"]')
-                        ?.value.trim() || '',
-                sum:
-                    Number(
-                        form.querySelector<HTMLInputElement>('[name="sum"]')
-                            ?.value
-                    ) || 0,
-                category:
-                    form
-                        .querySelector<HTMLInputElement>('[name="category"]')
-                        ?.value.trim() || '',
-            }
+        const form = event.target as HTMLFormElement;
+        FormData = {
+            title: form.querySelector<HTMLInputElement>('[name="title"]')?.value.trim() || '',
+            sum: Number(form.querySelector<HTMLInputElement>('[name="sum"]')?.value) || 0,
+            category: form.querySelector<HTMLInputElement>('[name="category"]')?.value.trim() || '',
+        };
 
-            const { isValid, errors } = validateForm(FormData, validationRules)
+        const { isValid, errors } = validateForm(FormData, validationRules);
 
-            if (!isValid) {
-                setFormErrors(errors)
-                return
-            }
-
-            expenseStateEvents.editExpense(FormData)
-            modalStateEvents.closeModal()
+        if (!isValid) {
+            setFormErrors(errors);
+            return;
         }
-    )
+
+        expenseStateEvents.editExpense(FormData);
+        modalStateEvents.closeModal();
+    });
 }
 
-initEvents()
+initEvents();

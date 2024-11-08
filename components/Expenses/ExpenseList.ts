@@ -1,28 +1,26 @@
-import '#styles/components/expense/expense-list.css'
-import { ExpenseStateType } from '#types/expense.ts'
-import addDynamicEventListener from '#utils/DynamicEventListener.ts'
+import '#styles/components/expense/expense-list.css';
+import { ExpenseStateType } from '#types/expense.ts';
+import addDynamicEventListener from '#utils/DynamicEventListener.ts';
 
-let ExpenseState: ExpenseStateType
+let ExpenseState: ExpenseStateType;
 
 export default function renderExpenseList(state: ExpenseStateType) {
     if (!ExpenseState) {
-        ExpenseState = state
+        ExpenseState = state;
     }
 
-    const listContainer = document.querySelector('.expense-list-js')
-    if (!listContainer) return
+    const listContainer = document.querySelector('.expense-list-js');
+    if (!listContainer) return;
 
-    listContainer.innerHTML = ''
+    listContainer.innerHTML = '';
 
-    let expenses = state.expenses
+    let expenses = state.expenses;
     if (state.filterCategory !== 'Все категории') {
-        expenses = state.expenses.filter(
-            (expense) => expense.category === state.filterCategory
-        )
+        expenses = state.expenses.filter((expense) => expense.category === state.filterCategory);
     }
 
     expenses.forEach((expense) => {
-        const category = expense.category || 'Без категории'
+        const category = expense.category || 'Без категории';
         const item = `
             <div class="expense-item" data-id="${expense.id}">
                 <div class="expense-item__category">${category}</div>
@@ -37,41 +35,31 @@ export default function renderExpenseList(state: ExpenseStateType) {
                     </div>
                 </div>
             </div>
-        `
+        `;
 
-        listContainer.insertAdjacentHTML('beforeend', item)
-    })
+        listContainer.insertAdjacentHTML('beforeend', item);
+    });
 }
 
 function initEvents() {
-    const container = document.querySelector<HTMLDivElement>('.expense-list-js')
-    if (!container) return
+    const container = document.querySelector<HTMLDivElement>('.expense-list-js');
+    if (!container) return;
 
-    addDynamicEventListener(
-        container,
-        'click',
-        '.expense-item__delete',
-        (event) => {
-            const target = event.target as HTMLElement
-            const parent = target.closest('.expense-item') as HTMLElement
-            const id = parent.getAttribute('data-id') as string
+    addDynamicEventListener(container, 'click', '.expense-item__delete', (event) => {
+        const target = event.target as HTMLElement;
+        const parent = target.closest('.expense-item') as HTMLElement;
+        const id = parent.getAttribute('data-id') as string;
 
-            ExpenseState.removeExpense(id)
-        }
-    )
+        ExpenseState.removeExpense(id);
+    });
 
-    addDynamicEventListener(
-        container,
-        'click',
-        '.expense-item__edit',
-        (event) => {
-            const target = event.target as HTMLElement
-            const parent = target.closest('.expense-item') as HTMLElement
-            const id = parent.getAttribute('data-id') as string
+    addDynamicEventListener(container, 'click', '.expense-item__edit', (event) => {
+        const target = event.target as HTMLElement;
+        const parent = target.closest('.expense-item') as HTMLElement;
+        const id = parent.getAttribute('data-id') as string;
 
-            ExpenseState.openEditModal(id)
-        }
-    )
+        ExpenseState.openEditModal(id);
+    });
 }
 
-initEvents()
+initEvents();
