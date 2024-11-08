@@ -1,5 +1,5 @@
 import '#styles/components/expense/expense-edit-modal.css';
-import addDynamicEventListener from '#utils/DynamicEventListener.ts';
+import addDynamicEventListener from '#utils/dynamicEventListener.ts';
 import { ExpenseStateType } from '#types/state/expense.ts';
 import { ModalStateType } from '#types/state/modal.ts';
 import { validateForm, FormErrors } from '#utils/validateForm.ts';

@@ -1,7 +1,7 @@
 import '#styles/components/expense/expense-list.css';
 import { ExpenseStateType } from '#types/state/expense.ts';
 import { GlobalStateType } from '#types/state/global.ts';
-import addDynamicEventListener from '#utils/DynamicEventListener.ts';
+import addDynamicEventListener from '#utils/dynamicEventListener.ts';
 
 let globalState: GlobalStateType;
 let expenseState: ExpenseStateType;

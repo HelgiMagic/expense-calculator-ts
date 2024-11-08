@@ -1,7 +1,7 @@
 import '#styles/components/expense/expense-filter.css';
 import { ExpenseStateType } from '#types/state/expense.ts';
 import { GlobalStateType } from '#types/state/global.ts';
-import addDynamicEventListener from '#utils/DynamicEventListener.ts';
+import addDynamicEventListener from '#utils/dynamicEventListener.ts';
 
 // установка стейта через let нужна, чтоб обработчик событий устанавливался только один раз, а не при каждом рендере
 // напрямую импортнуть ExpenseState нельзя, т.к. будет зацикливание импортов

@@ -2,7 +2,7 @@ import { ModalStateType } from '#types/state/modal.ts';
 import { GlobalStateType } from '#types/state/global.ts';
 import '#styles/components/UI/modal.css';
 import renderExpenseEditModal from '#components/Expenses/ExpenseEditModal.ts';
-import addDynamicEventListener from '#utils/DynamicEventListener.ts';
+import addDynamicEventListener from '#utils/dynamicEventListener.ts';
 
 const modalContainer = document.querySelector<HTMLDivElement>('.modal-js');
 const overlay = document.querySelector<HTMLDivElement>('.modal-overlay');

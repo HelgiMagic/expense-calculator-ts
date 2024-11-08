@@ -1,5 +1,5 @@
 import '#styles/components/expense/expense-adding.css';
-import addDynamicEventListener from '#utils/DynamicEventListener.ts';
+import addDynamicEventListener from '#utils/dynamicEventListener.ts';
 import { ExpenseStateType } from '#types/state/expense.ts';
 import { validateForm, FormErrors } from '#utils/validateForm.ts';
 import { GlobalStateType } from '#types/state/global.ts';
