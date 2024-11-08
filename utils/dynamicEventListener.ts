@@ -25,14 +25,6 @@ function getConditionalCallback(selector: string, callback: EventCallback): Even
     };
 }
 
-type Props = {
-    rootElement: Element;
-    eventType: string;
-    selector: string;
-    callback: EventCallback;
-    options?: boolean | AddEventListenerOptions;
-};
-
 export default function addDynamicEventListener(
     rootElement: Element,
     eventType: string,

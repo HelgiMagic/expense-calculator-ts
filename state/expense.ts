@@ -9,7 +9,7 @@ import storageUtil from '#utils/storage.ts';
 // здесь можно сделать валидацию, на случай, если данные в локальном хранилище не соответствуют актуальным
 // function validateExpenses(data: any) {
 //     return data.every((expense: any) => {
-        
+
 //     })
 // }
 
