@@ -58,6 +58,7 @@
     .adding-row .error-message {
         position: absolute;
         top: -5px;
+        left: 20px;
         transform: translateY(-100%);
         text-wrap: nowrap;
     }
