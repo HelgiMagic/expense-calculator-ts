@@ -50,6 +50,19 @@
     background: linear-gradient(90deg, #ff65a8, #df528f);
 }
 
+@media (width >= 768px) {
+    .adding-row .input-wrapper {
+        position: relative;
+    }
+
+    .adding-row .error-message {
+        position: absolute;
+        top: -5px;
+        transform: translateY(-100%);
+        text-wrap: nowrap;
+    }
+}
+
 @media (width < 768px) {
     .add-expense-form-js {
         width: 100%;
@@ -66,8 +79,15 @@
         gap: 10px;
     }
 
-    .adding-row input {
+    .adding-row input,
+    .adding-row .input-wrapper {
         width: 100%;
+    }
+
+    .input-wrapper {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
     }
 
     .adding-row .separator {
