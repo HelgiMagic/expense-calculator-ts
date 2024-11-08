@@ -16,16 +16,14 @@ const ExpenseState: ExpenseStateType = {
     renderExpenseList(ExpenseState);
   },
   removeExpense: (id) => {
-    ExpenseState.expenses = ExpenseState.expenses.filter(
-      (expense) => expense.id !== id
-    );
+    ExpenseState.expenses = ExpenseState.expenses.filter((expense) => expense.id !== id);
     ExpenseState.calculateFilterCategories();
     renderExpenseList(ExpenseState);
   },
   calculateFilterCategories: () => {
     ExpenseState.categories = [
       'Все категории',
-      ...new Set(ExpenseState.expenses.map((expense) => expense.category)),
+      ...new Set(ExpenseState.expenses.map((expense) => expense.category).filter((category) => category !== '')),
     ];
 
     if (!ExpenseState.categories.includes(ExpenseState.filterCategory)) {
@@ -50,16 +48,13 @@ function init() {
     category: 'Кино',
   });
 
-  const addExpenseForm =
-    document.querySelector<HTMLFormElement>('#add-expense-form');
+  const addExpenseForm = document.querySelector<HTMLFormElement>('#add-expense-form');
   addExpenseForm?.addEventListener('submit', (event) => {
     event.preventDefault();
 
-    const titleInput =
-      addExpenseForm.querySelector<HTMLInputElement>('[name="title"]');
+    const titleInput = addExpenseForm.querySelector<HTMLInputElement>('[name="title"]');
     const sumInput = document.querySelector<HTMLInputElement>('[name="sum"]');
-    const categoryInput =
-      document.querySelector<HTMLSelectElement>('[name="category"]');
+    const categoryInput = document.querySelector<HTMLSelectElement>('[name="category"]');
 
     ExpenseState.addExpense({
       id: crypto.randomUUID(),
