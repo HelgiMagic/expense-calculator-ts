@@ -4,20 +4,19 @@ function getConditionalCallback(selector: string, callback: EventCallback): Even
     return function (e: Event) {
         if (e.target && (e.target as Element).matches(selector)) {
             (e as any).delegatedTarget = e.target;
-            callback.apply(this, arguments);
+            callback.call(this, e);
             return;
         }
-        // Not clicked directly, check bubble path
+
         const path = (e as any).path || (e.composedPath && e.composedPath());
         if (!path) return;
+
         for (let i = 0; i < path.length; ++i) {
             const el = path[i] as Element;
-            if (el.matches(selector)) {
-                // Call callback for all elements on the path that match the selector
+            if (el.matches && el.matches(selector)) {
                 (e as any).delegatedTarget = el;
-                callback.apply(this, arguments);
+                callback.call(this, e);
             }
-            // We reached parent node, stop
             if (el === e.currentTarget) {
                 return;
             }
@@ -34,5 +33,5 @@ export default function addDynamicEventListener(
 ): () => void {
     const cb = getConditionalCallback(selector, callback);
     rootElement.addEventListener(eventType, cb, options);
-    return rootElement.removeEventListener.bind(rootElement, eventType, cb, options);
+    return () => rootElement.removeEventListener(eventType, cb, options);
 }
