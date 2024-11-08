@@ -2,13 +2,13 @@ import '#styles/components/expense/expense-filter.css';
 import { ExpenseStateType } from '#types/expense.ts';
 import addDynamicEventListener from '#utils/DynamicEventListener.ts';
 
-// установка стейта через let нужна, чтоб обработчик событий устанавливался только один раз
+// установка стейта через let нужна, чтоб обработчик событий устанавливался только один раз, а не при каждом рендере
 // напрямую импортнуть ExpenseState нельзя, т.к. будет зацикливание импортов
-let ExpenseState: ExpenseStateType;
+let expenseStateEvents: ExpenseStateType;
 
 export default function renderExpenseCategoriesFilter(state: ExpenseStateType) {
-  if (!ExpenseState) {
-    ExpenseState = state;
+  if (!expenseStateEvents) {
+    expenseStateEvents = state;
   }
 
   const filtersContainer = document.querySelector('.expense-filters-js');
@@ -36,7 +36,7 @@ function initEvents() {
 
   addDynamicEventListener(document.body, 'click', '.filter-item', (event) => {
     const target = event.target as HTMLElement;
-    ExpenseState.changeFilterCategory(target.textContent || '');
+    expenseStateEvents.changeFilterCategory(target.textContent || '');
   });
 }
 

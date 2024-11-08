@@ -4,7 +4,7 @@ import renderExpenseCategoriesFilter from '#components/Expenses/ExpenseCategorie
 import modalState from '#state/modal.ts';
 import '#styles/components/expense/expense-adding.css';
 
-const ExpenseState: ExpenseStateType = {
+const expenseState: ExpenseStateType = {
   expenses: [],
   categories: ['Все категории'],
   filterCategory: 'Все категории',
@@ -13,60 +13,70 @@ const ExpenseState: ExpenseStateType = {
     console.log(expense);
     // если будет использоваться на проекте с множеством страниц, то можно делать разные рендеры, в зависимости от страницы
     // т.е. делать проверку через switch на адрес страницы
-    ExpenseState.expenses.push(expense);
+    expenseState.expenses.push(expense);
 
-    ExpenseState.calculateFilterCategories();
-    renderExpenseList(ExpenseState);
+    expenseState.calculateFilterCategories();
+    renderExpenseList(expenseState);
   },
   removeExpense: (id) => {
-    ExpenseState.expenses = ExpenseState.expenses.filter((expense) => expense.id !== id);
-    ExpenseState.calculateFilterCategories();
-    renderExpenseList(ExpenseState);
+    expenseState.expenses = expenseState.expenses.filter((expense) => expense.id !== id);
+    expenseState.calculateFilterCategories();
+    renderExpenseList(expenseState);
   },
-  editExpense: (id, data) => {},
+  editExpense: (newData) => {
+    const index = expenseState.expenses.findIndex((expense) => expense.id === expenseState.currentEditingExpenseId);
+    if (index === -1) return;
+
+    expenseState.expenses[index] = { ...expenseState.expenses[index], ...newData };
+    renderExpenseList(expenseState);
+    expenseState.calculateFilterCategories();
+  },
   openEditModal: (id) => {
+    expenseState.currentEditingExpenseId = id;
+
     modalState.openModal('edit-expense-modal', {
-      expenseState: ExpenseState,
-      expenseId: id,
+      expenseState: expenseState,
     });
   },
   calculateFilterCategories: () => {
-    ExpenseState.categories = [
+    expenseState.categories = [
       'Все категории',
-      ...new Set(ExpenseState.expenses.map((expense) => expense.category).filter((category) => category !== '')),
+      ...new Set(expenseState.expenses.map((expense) => expense.category).filter((category) => category !== '')),
     ];
 
-    if (!ExpenseState.categories.includes(ExpenseState.filterCategory)) {
-      ExpenseState.filterCategory = 'Все категории';
+    if (!expenseState.categories.includes(expenseState.filterCategory)) {
+      expenseState.filterCategory = 'Все категории';
     }
 
-    renderExpenseCategoriesFilter(ExpenseState);
+    renderExpenseCategoriesFilter(expenseState);
   },
   changeFilterCategory: (category) => {
-    ExpenseState.filterCategory = category;
-    renderExpenseList(ExpenseState);
-    renderExpenseCategoriesFilter(ExpenseState);
+    expenseState.filterCategory = category;
+    renderExpenseList(expenseState);
+    renderExpenseCategoriesFilter(expenseState);
   },
 };
 
 function init() {
   console.log('init');
-  ExpenseState.addExpense({
+  expenseState.addExpense({
     id: crypto.randomUUID(),
     title: 'Оппенгеймер',
     sum: 100,
     category: 'Кино',
   });
 
+  // мб выделим это в отдельный компонент без рендера
+
   const addExpenseForm = document.querySelector<HTMLFormElement>('#add-expense-form');
   addExpenseForm?.addEventListener('submit', (event) => {
     event.preventDefault();
 
     const titleInput = addExpenseForm.querySelector<HTMLInputElement>('[name="title"]');
-    const sumInput = document.querySelector<HTMLInputElement>('[name="sum"]');
-    const categoryInput = document.querySelector<HTMLSelectElement>('[name="category"]');
+    const sumInput = addExpenseForm.querySelector<HTMLInputElement>('[name="sum"]');
+    const categoryInput = addExpenseForm.querySelector<HTMLSelectElement>('[name="category"]');
 
-    ExpenseState.addExpense({
+    expenseState.addExpense({
       id: crypto.randomUUID(),
       title: titleInput?.value.trim() || '',
       sum: Number(sumInput?.value) || 0,
@@ -79,4 +89,4 @@ function init() {
 
 init();
 
-export default ExpenseState;
+export default expenseState;

@@ -1,6 +1,6 @@
 import '#styles/reset.css';
 import '#styles/style.css';
 
-import ExpenseState from '#state/expenses.ts';
+import expenseState from '#state/expense.ts';
 
-console.log(ExpenseState);
+console.log(expenseState);
