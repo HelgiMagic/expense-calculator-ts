@@ -1,8 +1,10 @@
 import { ExpenseStateType } from '#types/expense.ts'
 import renderExpenseList from '#components/Expenses/ExpenseList.ts'
 import renderExpenseCategoriesFilter from '#components/Expenses/ExpenseCategoriesFilter.ts'
+import renderAddExpenseForm from '#components/Expenses/AddExpenseForm.ts'
 import modalState from '#state/modal.ts'
-import '#styles/components/expense/expense-adding.css'
+
+console.log(renderAddExpenseForm);
 
 const expenseState: ExpenseStateType = {
     expenses: [],
@@ -75,31 +77,13 @@ function init() {
         title: 'Оппенгеймер',
         sum: 100,
         category: 'Кино',
-    })
+    });
+
+    renderAddExpenseForm(expenseState);
 
     // мб выделим это в отдельный компонент без рендера
 
-    const addExpenseForm =
-        document.querySelector<HTMLFormElement>('#add-expense-form')
-    addExpenseForm?.addEventListener('submit', (event) => {
-        event.preventDefault()
-
-        const titleInput =
-            addExpenseForm.querySelector<HTMLInputElement>('[name="title"]')
-        const sumInput =
-            addExpenseForm.querySelector<HTMLInputElement>('[name="sum"]')
-        const categoryInput =
-            addExpenseForm.querySelector<HTMLSelectElement>('[name="category"]')
-
-        expenseState.addExpense({
-            id: crypto.randomUUID(),
-            title: titleInput?.value.trim() || '',
-            sum: Number(sumInput?.value) || 0,
-            category: categoryInput?.value.trim() || '',
-        })
-
-        addExpenseForm.reset()
-    })
+   
 }
 
 init()

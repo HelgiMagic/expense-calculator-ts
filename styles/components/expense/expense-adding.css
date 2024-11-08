@@ -51,6 +51,10 @@
 }
 
 @media (width < 768px) {
+    .add-expense-form-js {
+        width: 100%;
+    }
+
     .adding-row {
         flex-direction: column;
         background: none;
