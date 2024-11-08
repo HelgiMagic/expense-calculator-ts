@@ -3,6 +3,8 @@ type ValidationResult = {
   errors: Record<string, string>;
 };
 
+export type FormErrors = Record<string, string | null>;
+
 export function validateForm(
   formData: Record<string, any>,
   rules: Record<string, (value: any) => string | null>

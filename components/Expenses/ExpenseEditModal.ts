@@ -2,30 +2,55 @@ import '#styles/components/expense/expense-edit-modal.css';
 import addDynamicEventListener from '#utils/DynamicEventListener.ts';
 import { ExpenseStateType } from '#types/expense.ts';
 import { ModalStateType } from '#types/modal.ts';
-import { validateForm } from '#utils/validateForm.ts';
+import { validateForm, FormErrors } from '#utils/validateForm.ts';
 
 let expenseStateEvents: ExpenseStateType;
 let modalStateEvents: ModalStateType;
 
+// local state
+let FormErrors: FormErrors = {
+  title: null,
+  sum: null,
+};
+
+// локальный стейт формы нужен для корректного отображения ошибок
+let FormData = {
+  title: '',
+  sum: 0,
+  category: '',
+};
+
+function setFormErrors(errors: FormErrors) {
+  FormErrors = errors;
+  renderExpenseEditModal(expenseStateEvents, modalStateEvents);
+}
+
 export default function renderExpenseEditModal(expenseState: ExpenseStateType, modalState: ModalStateType) {
+  const editingElement = expenseState.expenses.find((expense) => expense.id === expenseState.currentEditingExpenseId);
+  if (!editingElement) return;
+
+  // срабатывает 1 раз
   if (!expenseStateEvents) {
     expenseStateEvents = expenseState;
     modalStateEvents = modalState;
+    FormData = {
+      title: editingElement.title,
+      sum: editingElement.sum,
+      category: editingElement.category,
+    };
   }
 
   const container = document.querySelector<HTMLDivElement>('.modal-js');
-  if (!container) return;
+  if (!container || container.classList.contains('d-none')) return;
   container.innerHTML = '';
-
-  const editingElement = expenseState.expenses.find((expense) => expense.id === expenseState.currentEditingExpenseId);
-  if (!editingElement) return;
-  console.log(editingElement);
 
   const modal = `
         <form class="edit-expense-form" novalidate>
-            <input name="title" type="text" value="${editingElement.title}">
-            <input name="sum" type="number" value="${editingElement.sum}">
-            <input name="category" type="text" value="${editingElement.category}">
+            <div class="error-message">${FormErrors.title || ''}</div>
+            <input name="title" type="text" value="${FormData.title}">
+            <div class="error-message">${FormErrors.sum || ''}</div>
+            <input name="sum" type="number" value="${FormData.sum}">
+            <input name="category" type="text" value="${FormData.category}">
 
             <div class="buttons">
                 <button class="submit-expense-form" type="submit">Сохранить</button>
@@ -44,29 +69,26 @@ function initEvents() {
   const validationRules = {
     title: (value: string) => (value.trim() ? null : 'Название обязательно.'),
     sum: (value: number) => (value > 0 ? null : 'Сумма должна быть больше нуля.'),
-    category: (value: string) => (value.trim() ? null : 'Категория обязательна.'),
   };
 
   addDynamicEventListener(container, 'submit', '.edit-expense-form', (event) => {
     event.preventDefault();
 
     const form = event.target as HTMLFormElement;
-    const formData = {
+    FormData = {
       title: form.querySelector<HTMLInputElement>('[name="title"]')?.value.trim() || '',
       sum: Number(form.querySelector<HTMLInputElement>('[name="sum"]')?.value) || 0,
       category: form.querySelector<HTMLInputElement>('[name="category"]')?.value.trim() || '',
     };
 
-    const { isValid, errors } = validateForm(formData, validationRules);
-
-    console.log(isValid, errors);
+    const { isValid, errors } = validateForm(FormData, validationRules);
 
     if (!isValid) {
-      expenseStateEvents.setFormErrors(errors);
+      setFormErrors(errors);
       return;
     }
 
-    expenseStateEvents.editExpense(formData);
+    expenseStateEvents.editExpense(FormData);
     modalStateEvents.closeModal();
   });
 }
