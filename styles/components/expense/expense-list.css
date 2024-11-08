@@ -35,7 +35,8 @@
     flex-grow: 1;
 }
 
-.expense-item__delete, .expense-item__edit {
+.expense-item__delete,
+.expense-item__edit {
     border: 1px solid #ededed;
     border-radius: 5px;
     cursor: pointer;
@@ -45,7 +46,8 @@
     display: flex;
 }
 
-.expense-item__delete:hover, .expense-item__edit:hover {
+.expense-item__delete:hover,
+.expense-item__edit:hover {
     background: #ededed;
 }
 

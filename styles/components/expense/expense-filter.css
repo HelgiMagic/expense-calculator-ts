@@ -11,9 +11,10 @@
     padding: 5px 10px;
     border-radius: 10px;
     cursor: pointer;
-    transition: all 0.3s
+    transition: all 0.3s;
 }
 
-.filter-item.active, .filter-item:hover {
+.filter-item.active,
+.filter-item:hover {
     background: #e4ff97;
 }

@@ -1,26 +1,26 @@
 .adding-wrapper {
-  display: flex;
-  justify-content: center;
+    display: flex;
+    justify-content: center;
 
-  padding: 16px;
-  background: #e4ff97;
+    padding: 16px;
+    background: #e4ff97;
 }
 
 .adding-row {
-  display: flex;
-  align-items: center;
-  background: white;
-  border-radius: 100px;
+    display: flex;
+    align-items: center;
+    background: white;
+    border-radius: 100px;
 
-  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.15);
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.15);
 }
 
 .adding-wrapper input {
-  padding: 15px 20px;
-  border-radius: 50px;
-  position: relative;
+    padding: 15px 20px;
+    border-radius: 50px;
+    position: relative;
 
-  transition: all 0.3s;
+    transition: all 0.3s;
 }
 
 .adding-wrapper .separator {
@@ -40,41 +40,41 @@
 }
 
 .adding-wrapper button {
-  border-radius: 50px;
-  height: 28px;
-  width: 28px;
-  background: #ff385c;
-  cursor: pointer;
+    border-radius: 50px;
+    height: 28px;
+    width: 28px;
+    background: #ff385c;
+    cursor: pointer;
 
-  margin: 0 10px;
+    margin: 0 10px;
 
-  svg {
-    height: 14px;
-    width: 14px;
-  }
+    svg {
+        height: 14px;
+        width: 14px;
+    }
 }
 
 .adding-wrapper button:hover {
-  background: linear-gradient(90deg, #ff65a8, #df528f);
+    background: linear-gradient(90deg, #ff65a8, #df528f);
 }
 
 @media (width < 768px) {
-  .adding-row {
-    flex-direction: column;
-    background: none;
-    border-radius: 0;
-    box-shadow: none;
+    .adding-row {
+        flex-direction: column;
+        background: none;
+        border-radius: 0;
+        box-shadow: none;
 
-    height: 100%;
-    width: 100%;
-    gap: 10px;
-  }
+        height: 100%;
+        width: 100%;
+        gap: 10px;
+    }
 
-  .adding-row input {
-    width: 100%;
-  }
+    .adding-row input {
+        width: 100%;
+    }
 
-  .adding-row .separator {
-    display: none;
-  }
+    .adding-row .separator {
+        display: none;
+    }
 }

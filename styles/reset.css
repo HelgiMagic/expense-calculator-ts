@@ -1,9 +1,9 @@
 *,
 *:before,
 *:after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 
 img {
@@ -11,18 +11,20 @@ img {
     display: block;
 }
 
-input, button {
+input,
+button {
     outline: none;
     border: none;
     font-family: inherit;
 }
 
-button, a {
+button,
+a {
     cursor: pointer;
 }
 
-input[type="number"]::-webkit-outer-spin-button,
-input[type="number"]::-webkit-inner-spin-button {
+input[type='number']::-webkit-outer-spin-button,
+input[type='number']::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
 }
