@@ -2,7 +2,7 @@ import '#styles/components/expense/expense-edit-modal.css';
 import addDynamicEventListener from '#utils/DynamicEventListener.ts';
 import { ExpenseStateType } from '#types/expense.ts';
 import { ModalStateType } from '#types/modal.ts';
-import ExpenseState from '#state/expense.ts';
+import { validateForm } from '#utils/validateForm.ts';
 
 let expenseStateEvents: ExpenseStateType;
 let modalStateEvents: ModalStateType;
@@ -17,12 +17,12 @@ export default function renderExpenseEditModal(expenseState: ExpenseStateType, m
   if (!container) return;
   container.innerHTML = '';
 
-  const editingElement = expenseState.expenses.find((expense) => expense.id === ExpenseState.currentEditingExpenseId);
+  const editingElement = expenseState.expenses.find((expense) => expense.id === expenseState.currentEditingExpenseId);
   if (!editingElement) return;
   console.log(editingElement);
 
   const modal = `
-        <form class="edit-expense-form">
+        <form class="edit-expense-form" novalidate>
             <input name="title" type="text" value="${editingElement.title}">
             <input name="sum" type="number" value="${editingElement.sum}">
             <input name="category" type="text" value="${editingElement.category}">
@@ -41,21 +41,32 @@ function initEvents() {
   const container = document.querySelector<HTMLDivElement>('.modal-js');
   if (!container) return;
 
+  const validationRules = {
+    title: (value: string) => (value.trim() ? null : 'Название обязательно.'),
+    sum: (value: number) => (value > 0 ? null : 'Сумма должна быть больше нуля.'),
+    category: (value: string) => (value.trim() ? null : 'Категория обязательна.'),
+  };
+
   addDynamicEventListener(container, 'submit', '.edit-expense-form', (event) => {
     event.preventDefault();
 
     const form = event.target as HTMLFormElement;
+    const formData = {
+      title: form.querySelector<HTMLInputElement>('[name="title"]')?.value.trim() || '',
+      sum: Number(form.querySelector<HTMLInputElement>('[name="sum"]')?.value) || 0,
+      category: form.querySelector<HTMLInputElement>('[name="category"]')?.value.trim() || '',
+    };
 
-    const titleInput = form.querySelector<HTMLInputElement>('[name="title"]');
-    const sumInput = form.querySelector<HTMLInputElement>('[name="sum"]');
-    const categoryInput = form.querySelector<HTMLSelectElement>('[name="category"]');
+    const { isValid, errors } = validateForm(formData, validationRules);
 
-    expenseStateEvents.editExpense({
-      title: titleInput?.value.trim() || '',
-      sum: Number(sumInput?.value) || 0,
-      category: categoryInput?.value.trim() || '',
-    });
+    console.log(isValid, errors);
 
+    if (!isValid) {
+      expenseStateEvents.setFormErrors(errors);
+      return;
+    }
+
+    expenseStateEvents.editExpense(formData);
     modalStateEvents.closeModal();
   });
 }
