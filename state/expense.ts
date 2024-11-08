@@ -3,6 +3,7 @@ import { GlobalStateType } from '#types/state/global.ts';
 import renderExpenseList from '#components/Expenses/ExpenseList.ts';
 import renderExpenseCategoriesFilter from '#components/Expenses/ExpenseCategoriesFilter.ts';
 import renderAddExpenseForm from '#components/Expenses/AddExpenseForm.ts';
+import renderExpenseSum from '#components/Expenses/ExpenseSum.ts';
 import storageUtil from '#utils/storage.ts';
 
 // TODO
@@ -25,6 +26,7 @@ function createExpenseState(globalState: GlobalStateType) {
 
             expenseState.calculateFilterCategories();
             renderExpenseList(globalState);
+            renderExpenseSum(globalState);
         },
         removeExpense: (id) => {
             expenseState.expenses = expenseState.expenses.filter((expense) => expense.id !== id);
@@ -32,6 +34,7 @@ function createExpenseState(globalState: GlobalStateType) {
 
             expenseState.calculateFilterCategories();
             renderExpenseList(globalState);
+            renderExpenseSum(globalState);
         },
         editExpense: (newData) => {
             const index = expenseState.expenses.findIndex(
@@ -46,8 +49,9 @@ function createExpenseState(globalState: GlobalStateType) {
 
             storageUtil.save('expenses', expenseState.expenses);
 
-            renderExpenseList(globalState);
             expenseState.calculateFilterCategories();
+            renderExpenseList(globalState);
+            renderExpenseSum(globalState);
         },
         openEditModal: (id) => {
             expenseState.currentEditingExpenseId = id;
@@ -72,6 +76,7 @@ function createExpenseState(globalState: GlobalStateType) {
             expenseState.filterCategory = category;
             renderExpenseList(globalState);
             renderExpenseCategoriesFilter(globalState);
+            renderExpenseSum(globalState);
         },
     };
 
@@ -83,6 +88,7 @@ function initExpenseState(globalState: GlobalStateType) {
     globalState.expenseState.calculateFilterCategories();
     renderExpenseList(globalState);
     renderExpenseCategoriesFilter(globalState);
+    renderExpenseSum(globalState);
 }
 
 export { initExpenseState, createExpenseState };
