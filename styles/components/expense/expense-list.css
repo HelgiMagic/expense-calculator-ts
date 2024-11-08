@@ -48,3 +48,9 @@
 .expense-item__delete:hover, .expense-item__edit:hover {
     background: #ededed;
 }
+
+@media (width < 768px) {
+    .expense-list-js {
+        grid-template-columns: 1fr;
+    }
+}

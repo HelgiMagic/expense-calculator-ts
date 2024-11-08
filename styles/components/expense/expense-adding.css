@@ -57,3 +57,24 @@
 .adding-wrapper button:hover {
   background: linear-gradient(90deg, #ff65a8, #df528f);
 }
+
+@media (width < 768px) {
+  .adding-row {
+    flex-direction: column;
+    background: none;
+    border-radius: 0;
+    box-shadow: none;
+
+    height: 100%;
+    width: 100%;
+    gap: 10px;
+  }
+
+  .adding-row input {
+    width: 100%;
+  }
+
+  .adding-row .separator {
+    display: none;
+  }
+}
