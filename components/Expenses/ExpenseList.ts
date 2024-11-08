@@ -1,12 +1,15 @@
 import '#styles/components/expense/expense-list.css';
-import { ExpenseStateType } from '#types/expense.ts';
+import { ExpenseStateType } from '#types/state/expense.ts';
+import { GlobalStateType } from '#types/state/global.ts';
 import addDynamicEventListener from '#utils/DynamicEventListener.ts';
 
-let ExpenseState: ExpenseStateType;
+let globalState: GlobalStateType;
+let expenseState: ExpenseStateType;
 
-export default function renderExpenseList(state: ExpenseStateType) {
-    if (!ExpenseState) {
-        ExpenseState = state;
+export default function renderExpenseList(globalStateParam: GlobalStateType) {
+    if (!globalState) {
+        globalState = globalStateParam;
+        expenseState = globalState.expenseState;
     }
 
     const listContainer = document.querySelector('.expense-list-js');
@@ -14,9 +17,9 @@ export default function renderExpenseList(state: ExpenseStateType) {
 
     listContainer.innerHTML = '';
 
-    let expenses = state.expenses;
-    if (state.filterCategory !== 'Все категории') {
-        expenses = state.expenses.filter((expense) => expense.category === state.filterCategory);
+    let expenses = expenseState.expenses;
+    if (expenseState.filterCategory !== 'Все категории') {
+        expenses = expenseState.expenses.filter((expense) => expense.category === expenseState.filterCategory);
     }
 
     expenses.forEach((expense) => {
@@ -50,7 +53,7 @@ function init() {
         const parent = target.closest('.expense-item') as HTMLElement;
         const id = parent.getAttribute('data-id') as string;
 
-        ExpenseState.removeExpense(id);
+        expenseState.removeExpense(id);
     });
 
     addDynamicEventListener(container, 'click', '.expense-item__edit', (event) => {
@@ -58,7 +61,7 @@ function init() {
         const parent = target.closest('.expense-item') as HTMLElement;
         const id = parent.getAttribute('data-id') as string;
 
-        ExpenseState.openEditModal(id);
+        expenseState.openEditModal(id);
     });
 }
 

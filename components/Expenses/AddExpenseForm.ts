@@ -1,9 +1,11 @@
 import '#styles/components/expense/expense-adding.css';
 import addDynamicEventListener from '#utils/DynamicEventListener.ts';
-import { ExpenseStateType } from '#types/expense.ts';
+import { ExpenseStateType } from '#types/state/expense.ts';
 import { validateForm, FormErrors } from '#utils/validateForm.ts';
+import { GlobalStateType } from '#types/state/global.ts';
 
-let expenseStateEvents: ExpenseStateType;
+let globalState: GlobalStateType;
+let expenseState: ExpenseStateType;
 
 const initFormData = {
     title: '',
@@ -20,12 +22,13 @@ let formErrors: FormErrors = {
 
 function setFormErrors(errors: FormErrors) {
     formErrors = errors;
-    renderAddExpenseForm(expenseStateEvents);
+    renderAddExpenseForm(globalState);
 }
 
-export default function renderAddExpenseForm(expenseState: ExpenseStateType) {
-    if (!expenseStateEvents) {
-        expenseStateEvents = expenseState;
+export default function renderAddExpenseForm(globalStateParam: GlobalStateType) {
+    if (!globalState) {
+        globalState = globalStateParam;
+        expenseState = globalState.expenseState;
     }
 
     const container = document.querySelector('.add-expense-form-js');
@@ -88,14 +91,14 @@ function init() {
             return;
         }
 
-        expenseStateEvents.addExpense({
+        expenseState.addExpense({
             id: crypto.randomUUID(),
             ...formData,
         });
 
         // reset
         formData = initFormData;
-        renderAddExpenseForm(expenseStateEvents);
+        renderAddExpenseForm(globalState);
     });
 }
 

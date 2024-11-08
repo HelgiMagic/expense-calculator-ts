@@ -3,6 +3,6 @@ import '#styles/style.css';
 import '#styles/components/UI/form.css';
 import '#styles/components/header.css';
 
-import expenseState from '#state/expense.ts';
+import globalState from '#state/global.ts';
 
-console.log(expenseState);
+console.log(globalState);

@@ -1,11 +1,13 @@
 import '#styles/components/expense/expense-edit-modal.css';
 import addDynamicEventListener from '#utils/DynamicEventListener.ts';
-import { ExpenseStateType } from '#types/expense.ts';
-import { ModalStateType } from '#types/modal.ts';
+import { ExpenseStateType } from '#types/state/expense.ts';
+import { ModalStateType } from '#types/state/modal.ts';
 import { validateForm, FormErrors } from '#utils/validateForm.ts';
+import { GlobalStateType } from '#types/state/global.ts';
 
-let expenseStateEvents: ExpenseStateType;
-let modalStateEvents: ModalStateType;
+let globalState: GlobalStateType;
+let expenseState: ExpenseStateType;
+let modalState: ModalStateType;
 
 // local state
 // локальный стейт формы нужен для корректного отображения ошибок
@@ -17,25 +19,28 @@ let formData = {
 
 let elementId: string | null = null;
 
-let formErrors: FormErrors = {
+const initFormErrors: FormErrors = {
     title: null,
     sum: null,
 };
 
+let formErrors: FormErrors = initFormErrors;
+
 function setFormErrors(errors: FormErrors) {
     formErrors = errors;
-    renderExpenseEditModal(expenseStateEvents, modalStateEvents);
+    renderExpenseEditModal(globalState);
 }
 
-export default function renderExpenseEditModal(expenseState: ExpenseStateType, modalState: ModalStateType) {
+export default function renderExpenseEditModal(globalStateParam: GlobalStateType) {
+    // срабатывает 1 раз
+    if (!globalState) {
+        globalState = globalStateParam;
+        expenseState = globalState.expenseState;
+        modalState = globalState.modalState;
+    }
+
     const editingElement = expenseState.expenses.find((expense) => expense.id === expenseState.currentEditingExpenseId);
     if (!editingElement) return;
-
-    // срабатывает 1 раз
-    if (!expenseStateEvents) {
-        expenseStateEvents = expenseState;
-        modalStateEvents = modalState;
-    }
 
     // инициализация локального стейта формы при первой загрузке или при переключении элементов
     if (elementId !== expenseState.currentEditingExpenseId) {
@@ -44,6 +49,7 @@ export default function renderExpenseEditModal(expenseState: ExpenseStateType, m
             sum: editingElement.sum,
             category: editingElement.category,
         };
+        formErrors = initFormErrors;
 
         elementId = expenseState.currentEditingExpenseId;
     }
@@ -96,8 +102,8 @@ function init() {
             return;
         }
 
-        expenseStateEvents.editExpense(formData);
-        modalStateEvents.closeModal();
+        expenseState.editExpense(formData);
+        modalState.closeModal();
     });
 }
 
