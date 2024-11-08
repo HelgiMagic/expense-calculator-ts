@@ -9,7 +9,7 @@ let modalStateEvents: ModalStateType;
 
 // local state
 // локальный стейт формы нужен для корректного отображения ошибок
-let FormData = {
+let formData = {
     title: '',
     sum: 0,
     category: '',
@@ -17,13 +17,13 @@ let FormData = {
 
 let elementId: string | null = null;
 
-let FormErrors: FormErrors = {
+let formErrors: FormErrors = {
     title: null,
     sum: null,
 };
 
 function setFormErrors(errors: FormErrors) {
-    FormErrors = errors;
+    formErrors = errors;
     renderExpenseEditModal(expenseStateEvents, modalStateEvents);
 }
 
@@ -35,16 +35,11 @@ export default function renderExpenseEditModal(expenseState: ExpenseStateType, m
     if (!expenseStateEvents) {
         expenseStateEvents = expenseState;
         modalStateEvents = modalState;
-        FormData = {
-            title: editingElement.title,
-            sum: editingElement.sum,
-            category: editingElement.category,
-        };
     }
 
     // инициализация локального стейта формы при первой загрузке или при переключении элементов
     if (elementId !== expenseState.currentEditingExpenseId) {
-        FormData = {
+        formData = {
             title: editingElement.title,
             sum: editingElement.sum,
             category: editingElement.category,
@@ -59,11 +54,11 @@ export default function renderExpenseEditModal(expenseState: ExpenseStateType, m
 
     const modal = `
         <form class="edit-expense-form" novalidate>
-            <div class="error-message">${FormErrors.title || ''}</div>
-            <input name="title" type="text" value="${FormData.title}">
-            <div class="error-message">${FormErrors.sum || ''}</div>
-            <input name="sum" type="number" value="${FormData.sum}">
-            <input name="category" type="text" value="${FormData.category}">
+            <div class="error-message">${formErrors.title || ''}</div>
+            <input name="title" type="text" value="${formData.title}">
+            <div class="error-message">${formErrors.sum || ''}</div>
+            <input name="sum" type="number" value="${formData.sum}">
+            <input name="category" type="text" value="${formData.category}">
 
             <div class="buttons">
                 <button class="submit-expense-form" type="submit">Сохранить</button>
@@ -88,20 +83,20 @@ function init() {
         event.preventDefault();
 
         const form = event.target as HTMLFormElement;
-        FormData = {
+        formData = {
             title: form.querySelector<HTMLInputElement>('[name="title"]')?.value.trim() || '',
             sum: Number(form.querySelector<HTMLInputElement>('[name="sum"]')?.value) || 0,
             category: form.querySelector<HTMLInputElement>('[name="category"]')?.value.trim() || '',
         };
 
-        const { isValid, errors } = validateForm(FormData, validationRules);
+        const { isValid, errors } = validateForm(formData, validationRules);
 
         if (!isValid) {
             setFormErrors(errors);
             return;
         }
 
-        expenseStateEvents.editExpense(FormData);
+        expenseStateEvents.editExpense(formData);
         modalStateEvents.closeModal();
     });
 }
