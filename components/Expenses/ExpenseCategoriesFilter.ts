@@ -16,8 +16,6 @@ export default function renderExpenseCategoriesFilter(expenseState: ExpenseState
 
     filtersContainer.innerHTML = '';
 
-    console.log(expenseState.categories);
-
     expenseState.categories.forEach((category) => {
         const itemClass = category === expenseState.filterCategory ? 'active' : '';
         const item = `

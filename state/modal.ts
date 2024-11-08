@@ -15,14 +15,12 @@ const modalState: ModalStateType = {
         overlay?.classList.remove('d-none');
 
         if (modalName === 'edit-expense-modal') {
-            console.log('open modal');
             const expenseState: ExpenseStateType = data.expenseState;
             renderExpenseEditModal(expenseState, modalState);
         }
     },
     closeModal: () => {
         modalState.openedModal = null;
-        console.log('test');
 
         // добавление d-none к оверлей и modal-js
         modalContainer?.classList.add('d-none');
