@@ -3,25 +3,32 @@ import renderExpenseList from '#components/Expenses/ExpenseList.ts';
 import renderExpenseCategoriesFilter from '#components/Expenses/ExpenseCategoriesFilter.ts';
 import renderAddExpenseForm from '#components/Expenses/AddExpenseForm.ts';
 import modalState from '#state/modal.ts';
+import storageUtil from '#utils/storage.ts';
 
-console.log(renderAddExpenseForm);
+// TODO
+// здесь можно сделать валидацию, на случай, если данные в локальном хранилище не соответствуют актуальным
+// function validateExpenses(data: any) {
+//     return data.every((expense: any) => {
+        
+//     })
+// }
 
 const expenseState: ExpenseStateType = {
-    expenses: [],
+    expenses: storageUtil.load('expenses') || [],
     categories: ['Все категории'],
     filterCategory: 'Все категории',
     currentEditingExpenseId: null,
     addExpense: (expense) => {
-        console.log(expense);
-        // если будет использоваться на проекте с множеством страниц, то можно делать разные рендеры, в зависимости от страницы
-        // т.е. делать проверку через switch на адрес страницы
         expenseState.expenses.push(expense);
+        storageUtil.save('expenses', expenseState.expenses);
 
         expenseState.calculateFilterCategories();
         renderExpenseList(expenseState);
     },
     removeExpense: (id) => {
         expenseState.expenses = expenseState.expenses.filter((expense) => expense.id !== id);
+        storageUtil.save('expenses', expenseState.expenses);
+
         expenseState.calculateFilterCategories();
         renderExpenseList(expenseState);
     },
@@ -33,6 +40,9 @@ const expenseState: ExpenseStateType = {
             ...expenseState.expenses[index],
             ...newData,
         };
+
+        storageUtil.save('expenses', expenseState.expenses);
+
         renderExpenseList(expenseState);
         expenseState.calculateFilterCategories();
     },
@@ -63,17 +73,10 @@ const expenseState: ExpenseStateType = {
 };
 
 function init() {
-    console.log('init');
-    expenseState.addExpense({
-        id: crypto.randomUUID(),
-        title: 'Оппенгеймер',
-        sum: 100,
-        category: 'Кино',
-    });
-
     renderAddExpenseForm(expenseState);
-
-    // мб выделим это в отдельный компонент без рендера
+    expenseState.calculateFilterCategories();
+    renderExpenseList(expenseState);
+    renderExpenseCategoriesFilter(expenseState);
 }
 
 init();
