@@ -41,6 +41,7 @@
     cursor: pointer;
 
     padding: 3px;
+    height: fit-content;
     display: flex;
 }
 

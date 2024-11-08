@@ -12,7 +12,7 @@ export type ExpenseStateType = {
   currentEditingExpenseId: string | null;
   addExpense: (expense: Expense) => void;
   removeExpense: (id: string) => void;
-  editExpense: (id: string, data: Partial<Expense>) => void;
+  editExpense: (newData: Partial<Expense>) => void;
   openEditModal: (id: string) => void;
   changeFilterCategory: (category: string) => void;
   calculateFilterCategories: () => void;
