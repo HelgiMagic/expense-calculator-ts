@@ -1,5 +1,5 @@
-import '#styles/components/expense-filter.css';
-import { ExpenseStateType } from '#types/main.ts';
+import '#styles/components/expense/expense-filter.css';
+import { ExpenseStateType } from '#types/expense.ts';
 import addDynamicEventListener from '#utils/DynamicEventListener.ts';
 
 // установка стейта через let нужна, чтоб обработчик событий устанавливался только один раз

@@ -1,11 +1,13 @@
-import { ExpenseStateType } from '#types/main.ts';
+import { ExpenseStateType } from '#types/expense.ts';
 import renderExpenseList from '#components/Expenses/ExpenseList.ts';
 import renderExpenseCategoriesFilter from '#components/Expenses/ExpenseCategoriesFilter.ts';
+import modalState from '#state/modal.ts';
 
 const ExpenseState: ExpenseStateType = {
   expenses: [],
   categories: ['Все категории'],
   filterCategory: 'Все категории',
+  currentEditingExpenseId: null,
   addExpense: (expense) => {
     console.log(expense);
     // если будет использоваться на проекте с множеством страниц, то можно делать разные рендеры, в зависимости от страницы
@@ -19,6 +21,13 @@ const ExpenseState: ExpenseStateType = {
     ExpenseState.expenses = ExpenseState.expenses.filter((expense) => expense.id !== id);
     ExpenseState.calculateFilterCategories();
     renderExpenseList(ExpenseState);
+  },
+  editExpense: (id, data) => {},
+  openEditModal: (id) => {
+    modalState.openModal('edit-expense-modal', {
+      expenseState: ExpenseState,
+      expenseId: id,
+    });
   },
   calculateFilterCategories: () => {
     ExpenseState.categories = [
