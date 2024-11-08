@@ -41,7 +41,7 @@ export default function renderExpenseList(state: ExpenseStateType) {
     });
 }
 
-function initEvents() {
+function init() {
     const container = document.querySelector<HTMLDivElement>('.expense-list-js');
     if (!container) return;
 
@@ -62,4 +62,4 @@ function initEvents() {
     });
 }
 
-initEvents();
+init();

@@ -75,7 +75,7 @@ export default function renderExpenseEditModal(expenseState: ExpenseStateType, m
     container.insertAdjacentHTML('beforeend', modal);
 }
 
-function initEvents() {
+function init() {
     const container = document.querySelector<HTMLDivElement>('.modal-js');
     if (!container) return;
 
@@ -106,4 +106,4 @@ function initEvents() {
     });
 }
 
-initEvents();
+init();

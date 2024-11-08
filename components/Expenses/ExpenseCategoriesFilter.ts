@@ -30,7 +30,7 @@ export default function renderExpenseCategoriesFilter(expenseState: ExpenseState
 
 // используется кастомный обработчик, чтобы можно было рендерить через insertAdjacentHTML вместо document.createElement
 
-function initEvents() {
+function init() {
     const container = document.querySelector<HTMLDivElement>('.expense-filters-js');
     if (!container) return;
 
@@ -40,4 +40,4 @@ function initEvents() {
     });
 }
 
-initEvents();
+init();
