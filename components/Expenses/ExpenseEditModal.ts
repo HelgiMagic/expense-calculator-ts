@@ -8,16 +8,18 @@ let expenseStateEvents: ExpenseStateType;
 let modalStateEvents: ModalStateType;
 
 // local state
-let FormErrors: FormErrors = {
-  title: null,
-  sum: null,
-};
-
 // локальный стейт формы нужен для корректного отображения ошибок
 let FormData = {
   title: '',
   sum: 0,
   category: '',
+};
+
+let elementId: string | null = null;
+
+let FormErrors: FormErrors = {
+  title: null,
+  sum: null,
 };
 
 function setFormErrors(errors: FormErrors) {
@@ -38,6 +40,17 @@ export default function renderExpenseEditModal(expenseState: ExpenseStateType, m
       sum: editingElement.sum,
       category: editingElement.category,
     };
+  }
+
+  // инициализация локального стейта формы при первой загрузке или при переключении элементов
+  if (elementId !== expenseState.currentEditingExpenseId) {
+    FormData = {
+      title: editingElement.title,
+      sum: editingElement.sum,
+      category: editingElement.category,
+    };
+
+    elementId = expenseState.currentEditingExpenseId;
   }
 
   const container = document.querySelector<HTMLDivElement>('.modal-js');
