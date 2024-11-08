@@ -3,10 +3,15 @@
   src: url('assets/fonts/Montserrat-Regular.ttf');
 }
 
+:root {
+  --danger: #ff385c;
+  --success: #28a745; /* Добавлен цвет success */
+}
+
 body {
   font-family: 'Montserrat', sans-serif;
 }
 
 .d-none {
-    display: none !important;
+  display: none !important;
 }
