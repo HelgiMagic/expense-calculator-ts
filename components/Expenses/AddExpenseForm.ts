@@ -3,7 +3,7 @@ import addDynamicEventListener from '#utils/DynamicEventListener.ts';
 import { ExpenseStateType } from '#types/expense.ts';
 import { validateForm, FormErrors } from '#utils/validateForm.ts';
 
-let expenseStateEvents: ExpenseStateType;
+let expenseState: ExpenseStateType;
 
 const initFormData = {
     title: '',
@@ -20,12 +20,12 @@ let formErrors: FormErrors = {
 
 function setFormErrors(errors: FormErrors) {
     formErrors = errors;
-    renderAddExpenseForm(expenseStateEvents);
+    renderAddExpenseForm(expenseState);
 }
 
-export default function renderAddExpenseForm(expenseState: ExpenseStateType) {
-    if (!expenseStateEvents) {
-        expenseStateEvents = expenseState;
+export default function renderAddExpenseForm(expenseStateParam: ExpenseStateType) {
+    if (!expenseState) {
+        expenseState = expenseStateParam;
     }
 
     const container = document.querySelector('.add-expense-form-js');
@@ -88,14 +88,14 @@ function init() {
             return;
         }
 
-        expenseStateEvents.addExpense({
+        expenseState.addExpense({
             id: crypto.randomUUID(),
             ...formData,
         });
 
         // reset
         formData = initFormData;
-        renderAddExpenseForm(expenseStateEvents);
+        renderAddExpenseForm(expenseState);
     });
 }
 

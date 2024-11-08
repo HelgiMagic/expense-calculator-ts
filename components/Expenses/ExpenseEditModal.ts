@@ -4,8 +4,8 @@ import { ExpenseStateType } from '#types/expense.ts';
 import { ModalStateType } from '#types/modal.ts';
 import { validateForm, FormErrors } from '#utils/validateForm.ts';
 
-let expenseStateEvents: ExpenseStateType;
-let modalStateEvents: ModalStateType;
+let expenseState: ExpenseStateType;
+let modalState: ModalStateType;
 
 // local state
 // локальный стейт формы нужен для корректного отображения ошибок
@@ -24,18 +24,18 @@ let formErrors: FormErrors = {
 
 function setFormErrors(errors: FormErrors) {
     formErrors = errors;
-    renderExpenseEditModal(expenseStateEvents, modalStateEvents);
+    renderExpenseEditModal(expenseState, modalState);
 }
 
-export default function renderExpenseEditModal(expenseState: ExpenseStateType, modalState: ModalStateType) {
+export default function renderExpenseEditModal(expenseStateParam: ExpenseStateType, modalStateParam: ModalStateType) {
+    // срабатывает 1 раз
+    if (!expenseState) {
+        expenseState = expenseStateParam;
+        modalState = modalStateParam;
+    }
+
     const editingElement = expenseState.expenses.find((expense) => expense.id === expenseState.currentEditingExpenseId);
     if (!editingElement) return;
-
-    // срабатывает 1 раз
-    if (!expenseStateEvents) {
-        expenseStateEvents = expenseState;
-        modalStateEvents = modalState;
-    }
 
     // инициализация локального стейта формы при первой загрузке или при переключении элементов
     if (elementId !== expenseState.currentEditingExpenseId) {
@@ -96,8 +96,8 @@ function init() {
             return;
         }
 
-        expenseStateEvents.editExpense(formData);
-        modalStateEvents.closeModal();
+        expenseState.editExpense(formData);
+        modalState.closeModal();
     });
 }
 
