@@ -6,3 +6,7 @@
 body {
   font-family: 'Montserrat', sans-serif;
 }
+
+.d-none {
+    display: none !important;
+}

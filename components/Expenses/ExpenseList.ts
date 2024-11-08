@@ -1,5 +1,5 @@
-import '#styles/components/expense-list.css';
-import { ExpenseStateType } from '#types/main.ts';
+import '#styles/components/expense/expense-list.css';
+import { ExpenseStateType } from '#types/expense.ts';
 import addDynamicEventListener from '#utils/DynamicEventListener.ts';
 
 let ExpenseState: ExpenseStateType;
@@ -51,6 +51,14 @@ function initEvents() {
     const id = parent.getAttribute('data-id') as string;
 
     ExpenseState.removeExpense(id);
+  });
+
+  addDynamicEventListener(container, 'click', '.expense-item__edit', (event) => {
+    const target = event.target as HTMLElement;
+    const parent = target.closest('.expense-item') as HTMLElement;
+    const id = parent.getAttribute('data-id') as string;
+
+    ExpenseState.openEditModal(id);
   });
 }
 
