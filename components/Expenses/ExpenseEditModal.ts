@@ -1,15 +1,8 @@
 import '#styles/components/expense/expense-edit-modal.css';
 import addDynamicEventListener from '#utils/dynamicEventListener.ts';
-import { ExpenseStateType } from '#types/state/expense.ts';
-import { ModalStateType } from '#types/state/modal.ts';
 import { validateForm, FormErrors } from '#utils/validateForm.ts';
 import { GlobalStateType } from '#types/state/global.ts';
 
-let globalState: GlobalStateType;
-let expenseState: ExpenseStateType;
-let modalState: ModalStateType;
-
-// local state
 // локальный стейт формы нужен для корректного отображения ошибок
 let formData = {
     title: '',
@@ -26,18 +19,13 @@ const initFormErrors: FormErrors = {
 
 let formErrors: FormErrors = initFormErrors;
 
-function setFormErrors(errors: FormErrors) {
-    formErrors = errors;
-    renderExpenseEditModal(globalState);
-}
+export default function renderExpenseEditModal(globalState: GlobalStateType) {
+    const container = document.querySelector<HTMLDivElement>('.modal-js');
+    if (!container || container.classList.contains('d-none')) return;
+    container.innerHTML = '';
+    init(globalState);
 
-export default function renderExpenseEditModal(globalStateParam: GlobalStateType) {
-    // срабатывает 1 раз
-    if (!globalState) {
-        globalState = globalStateParam;
-        expenseState = globalState.expenseState;
-        modalState = globalState.modalState;
-    }
+    const expenseState = globalState.expenseState;
 
     const editingElement = expenseState.expenses.find((expense) => expense.id === expenseState.currentEditingExpenseId);
     if (!editingElement) return;
@@ -53,10 +41,6 @@ export default function renderExpenseEditModal(globalStateParam: GlobalStateType
 
         elementId = expenseState.currentEditingExpenseId;
     }
-
-    const container = document.querySelector<HTMLDivElement>('.modal-js');
-    if (!container || container.classList.contains('d-none')) return;
-    container.innerHTML = '';
 
     const modal = `
         <form class="edit-expense-form" novalidate>
@@ -76,14 +60,26 @@ export default function renderExpenseEditModal(globalStateParam: GlobalStateType
     container.insertAdjacentHTML('beforeend', modal);
 }
 
-function init() {
+let isInitialized = false;
+
+function init(globalState: GlobalStateType) {
+    if (isInitialized) return;
+    isInitialized = true;
     const container = document.querySelector<HTMLDivElement>('.modal-js');
     if (!container) return;
+
+    const expenseState = globalState.expenseState;
+    const modalState = globalState.modalState;
 
     const validationRules = {
         title: (value: string) => (value.trim() ? null : 'Название обязательно.'),
         sum: (value: number) => (value > 0 ? null : 'Сумма должна быть больше нуля.'),
     };
+
+    function setFormErrors(errors: FormErrors) {
+        formErrors = errors;
+        renderExpenseEditModal(globalState);
+    }
 
     addDynamicEventListener(container, 'submit', '.edit-expense-form', (event) => {
         event.preventDefault();
@@ -106,5 +102,3 @@ function init() {
         modalState.closeModal();
     });
 }
-
-init();

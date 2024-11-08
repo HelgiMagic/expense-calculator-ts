@@ -1,11 +1,7 @@
 import '#styles/components/expense/expense-adding.css';
 import addDynamicEventListener from '#utils/dynamicEventListener.ts';
-import { ExpenseStateType } from '#types/state/expense.ts';
 import { validateForm, FormErrors } from '#utils/validateForm.ts';
 import { GlobalStateType } from '#types/state/global.ts';
-
-let globalState: GlobalStateType;
-let expenseState: ExpenseStateType;
 
 const initFormData = {
     title: '',
@@ -20,21 +16,11 @@ let formErrors: FormErrors = {
     sum: null,
 };
 
-function setFormErrors(errors: FormErrors) {
-    formErrors = errors;
-    renderAddExpenseForm(globalState);
-}
-
-export default function renderAddExpenseForm(globalStateParam: GlobalStateType) {
-    if (!globalState) {
-        globalState = globalStateParam;
-        expenseState = globalState.expenseState;
-    }
-
+export default function renderAddExpenseForm(globalState: GlobalStateType) {
     const container = document.querySelector('.add-expense-form-js');
     if (!container) return;
-
     container.innerHTML = '';
+    init(globalState);
 
     const sumValue = formData.sum === 0 ? '' : formData.sum;
 
@@ -65,7 +51,14 @@ export default function renderAddExpenseForm(globalStateParam: GlobalStateType) 
     container.insertAdjacentHTML('beforeend', form);
 }
 
-function init() {
+let isInitialized = false;
+
+function init(globalState: GlobalStateType) {
+    if (isInitialized) return;
+    isInitialized = true;
+
+    const expenseState = globalState.expenseState;
+
     const container = document.querySelector<HTMLDivElement>('.add-expense-form-js');
     if (!container) return;
 
@@ -73,6 +66,11 @@ function init() {
         title: (value: string) => (value.trim() ? null : 'Название обязательно.'),
         sum: (value: number) => (value > 0 ? null : 'Сумма должна быть больше нуля.'),
     };
+
+    function setFormErrors(errors: FormErrors) {
+        formErrors = errors;
+        renderAddExpenseForm(globalState);
+    }
 
     addDynamicEventListener(container, 'submit', '#add-expense-form', (event) => {
         event.preventDefault();
@@ -101,5 +99,3 @@ function init() {
         renderAddExpenseForm(globalState);
     });
 }
-
-init();

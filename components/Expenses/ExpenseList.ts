@@ -1,21 +1,14 @@
 import '#styles/components/expense/expense-list.css';
-import { ExpenseStateType } from '#types/state/expense.ts';
 import { GlobalStateType } from '#types/state/global.ts';
 import addDynamicEventListener from '#utils/dynamicEventListener.ts';
 
-let globalState: GlobalStateType;
-let expenseState: ExpenseStateType;
-
-export default function renderExpenseList(globalStateParam: GlobalStateType) {
-    if (!globalState) {
-        globalState = globalStateParam;
-        expenseState = globalState.expenseState;
-    }
-
+export default function renderExpenseList(globalState: GlobalStateType) {
     const listContainer = document.querySelector('.expense-list-js');
     if (!listContainer) return;
-
     listContainer.innerHTML = '';
+    init(globalState);
+
+    const expenseState = globalState.expenseState;
 
     let expenses = expenseState.expenses;
     if (expenseState.filterCategory !== 'Все категории') {
@@ -44,9 +37,15 @@ export default function renderExpenseList(globalStateParam: GlobalStateType) {
     });
 }
 
-function init() {
+let isInitialized = false;
+
+function init(globalState: GlobalStateType) {
+    if (isInitialized) return;
+    isInitialized = true;
     const container = document.querySelector<HTMLDivElement>('.expense-list-js');
     if (!container) return;
+
+    const expenseState = globalState.expenseState;
 
     addDynamicEventListener(container, 'click', '.expense-item__delete', (event) => {
         const target = event.target as HTMLElement;
@@ -64,5 +63,3 @@ function init() {
         expenseState.openEditModal(id);
     });
 }
-
-init();

@@ -15,6 +15,13 @@ import storageUtil from '#utils/storage.ts';
 // }
 
 function createExpenseState(globalState: GlobalStateType) {
+    function updateExpenses() {
+        storageUtil.save('expenses', expenseState.expenses);
+        expenseState.calculateFilterCategories();
+        renderExpenseList(globalState);
+        renderExpenseSum(globalState);
+    }
+
     const expenseState: ExpenseStateType = {
         expenses: storageUtil.load('expenses') || [],
         categories: ['Все категории'],
@@ -22,19 +29,11 @@ function createExpenseState(globalState: GlobalStateType) {
         currentEditingExpenseId: null,
         addExpense: (expense) => {
             expenseState.expenses.push(expense);
-            storageUtil.save('expenses', expenseState.expenses);
-
-            expenseState.calculateFilterCategories();
-            renderExpenseList(globalState);
-            renderExpenseSum(globalState);
+            updateExpenses();
         },
         removeExpense: (id) => {
             expenseState.expenses = expenseState.expenses.filter((expense) => expense.id !== id);
-            storageUtil.save('expenses', expenseState.expenses);
-
-            expenseState.calculateFilterCategories();
-            renderExpenseList(globalState);
-            renderExpenseSum(globalState);
+            updateExpenses();
         },
         editExpense: (newData) => {
             const index = expenseState.expenses.findIndex(
@@ -47,11 +46,7 @@ function createExpenseState(globalState: GlobalStateType) {
                 ...newData,
             };
 
-            storageUtil.save('expenses', expenseState.expenses);
-
-            expenseState.calculateFilterCategories();
-            renderExpenseList(globalState);
-            renderExpenseSum(globalState);
+            updateExpenses();
         },
         openEditModal: (id) => {
             expenseState.currentEditingExpenseId = id;

@@ -1,20 +1,12 @@
 import '#styles/components/expense/expense-sum.css';
-import { ExpenseStateType } from '#types/state/expense.ts';
 import { GlobalStateType } from '#types/state/global.ts';
 
-let globalState: GlobalStateType;
-let expenseState: ExpenseStateType;
-
-export default function renderExpenseSum(globalStateParam: GlobalStateType) {
-    if (!globalState) {
-        globalState = globalStateParam;
-        expenseState = globalState.expenseState;
-    }
-
+export default function renderExpenseSum(globalState: GlobalStateType) {
     const container = document.querySelector<HTMLDivElement>('.expense-sum-js');
     if (!container) return;
-
     container.innerHTML = '';
+
+    const expenseState = globalState.expenseState;
 
     let expenses = expenseState.expenses;
     if (expenseState.filterCategory !== 'Все категории') {
